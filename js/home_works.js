@@ -21,20 +21,31 @@ checkButton.addEventListener('click', function() {
 });
 
 // 2
-function moveRight(childBlock, parentWidth, currentPosition) {
-    if (currentPosition < parentWidth - childBlock.offsetWidth) {
-        currentPosition++;
-        childBlock.style.left = currentPosition + 'px';
-        setTimeout(() => moveRight(childBlock, parentWidth, currentPosition), 10);
+const childBlock = document.querySelector('.child_block')
+const parentBlock = document.querySelector('.parent_block')
+
+
+const mainWidth = parentBlock.offsetWidth - childBlock.offsetWidth
+const mainHeight = parentBlock.offsetHeight - childBlock.offsetHeight
+let positionX = 0
+let positionY = 0
+
+const moveBlock = () => {
+    if (positionX < mainWidth && positionY === 0) {
+        positionX+=2;
+        childBlock.style.left = `${positionX}px`;
+    } else if (positionX >= mainWidth && positionY < mainHeight) {
+        positionY+=2;
+        childBlock.style.top = `${positionY}px`;
+    } else if (positionY >= mainHeight && positionX > 0) {
+        positionX-=2;
+        childBlock.style.left = `${positionX}px`;
+    } else if (positionX === 0 && positionY > 0) {
+        positionY-=2;
+        childBlock.style.top = `${positionY}px`;
     }
+
+    requestAnimationFrame(moveBlock);
 }
 
-const parentBlock = document.querySelector('.parent_block');
-const childBlock = document.querySelector('.child_block');
-
-const parentWidth = parentBlock.offsetWidth;
-// Устанавливаем начальную позицию маленького блока
-let currentPosition = 0;
-
-moveRight(childBlock, parentWidth, currentPosition);
-
+moveBlock();
