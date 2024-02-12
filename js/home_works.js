@@ -49,3 +49,40 @@ const moveBlock = () => {
 }
 
 moveBlock();
+
+// 3
+document.addEventListener("DOMContentLoaded", function() {
+    const secondsDisplay = document.getElementById("seconds");
+    const startButton = document.getElementById("start");
+    const stopButton = document.getElementById("stop");
+    const resetButton = document.getElementById("reset");
+
+    let timerId;
+    let counter = 0;
+
+    function startTimer() {
+        timerId = setInterval(function() {
+            counter++;
+            secondsDisplay.textContent = counter;
+        }, 1000);
+    }
+
+    startButton.addEventListener("click", function() {
+        if (!timerId) { // Проверяем, что счетчик еще не запущен
+            startTimer();
+        }
+    });
+
+    stopButton.addEventListener("click", function() {
+        clearInterval(timerId);
+        timerId = undefined;
+    });
+
+    resetButton.addEventListener("click", function() {
+        clearInterval(timerId);
+        timerId = undefined;
+        counter = 0;
+        secondsDisplay.textContent = counter;
+    });
+});
+
