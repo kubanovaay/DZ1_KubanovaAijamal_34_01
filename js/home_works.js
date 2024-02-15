@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     startButton.addEventListener("click", function() {
-        if (!timerId) { // Проверяем, что счетчик еще не запущен
+        if (!timerId) {
             startTimer();
         }
     });
@@ -85,4 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
         secondsDisplay.textContent = counter;
     });
 });
+
+
 

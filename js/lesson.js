@@ -16,3 +16,83 @@ phoneButton.addEventListener('click', () => {
         phoneResult.style.color = 'red'
     }
 })
+
+// TAB SLIDER
+
+// const tabContent = document.querySelectorAll('.tab_content_block')
+// const tabs = document.querySelectorAll('.tab_content_item')
+// const tabsParent = document.querySelector('.tab_content_items')
+//
+// let currentIndex = 0
+// const hideTabContents = () => {
+//     tabContent.forEach((item) => {
+//         item.style.display = 'none'
+//     })
+//     tabs.forEach((item) => {
+//         item.classList.remove('tab_content_item_active')
+//     })
+// }
+//
+// const showTabContents = (index = 0) => {
+//     tabContent[index].style.display = 'block'
+//     tabs[index].classList.add('tab_content_item_active')
+// }
+//
+//
+// hideTabContents()
+// showTabContents()
+//
+// tabsParent.onclick = (event) => {
+//     if (event.target.classList.contains('tab_content_item')) {
+//         tabs.forEach((tabItem, tabIndex) => {
+//             if (event.target === tabItem) {
+//                 hideTabContents()
+//                 showTabContents(tabIndex)
+//             }
+//         })
+//     }
+// }
+
+const tabContent = document.querySelectorAll('.tab_content_block');
+const tabs = document.querySelectorAll('.tab_content_item');
+const tabsParent = document.querySelector('.tab_content_items');
+
+let currentIndex = 0;
+
+const hideTabContents = () => {
+    tabContent.forEach((item) => {
+        item.style.display = 'none';
+    });
+    tabs.forEach((item) => {
+        item.classList.remove('tab_content_item_active');
+    });
+};
+
+const showTabContents = (index) => {
+    hideTabContents();
+    tabContent[index].style.display = 'block';
+    tabs[index].classList.add('tab_content_item_active');
+};
+
+tabsParent.onclick = (event) => {
+    if (event.target.classList.contains('tab_content_item')) {
+        tabs.forEach((tabItem, tabIndex) => {
+            if (event.target === tabItem) {
+                currentIndex = tabIndex;
+                showTabContents(tabIndex);
+            }
+        });
+    }
+};
+
+// Функция для переключения на следующую вкладку
+const switchTab = () => {
+    const nextIndex = (currentIndex + 1) % tabs.length
+    hideTabContents();
+    showTabContents(nextIndex);
+    currentIndex = nextIndex;
+};
+
+setInterval(switchTab, 3000);
+
+showTabContents(currentIndex);
