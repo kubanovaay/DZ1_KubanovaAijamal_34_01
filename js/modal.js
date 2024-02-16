@@ -28,6 +28,7 @@ modal.onclick = (event) => {
 }
 
 
+// Функция которая по скролу до конца появится модальное окно
 const handleScroll = () => {
     const isBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight;
 
@@ -38,5 +39,13 @@ const handleScroll = () => {
 }
 
 window.addEventListener('scroll', handleScroll);
+
+// Функция для вызова модального окна через 10 секунд
+const openModalAfterDelay = () => {
+    setTimeout(openModal, 10000);
+}
+
+window.onload = openModalAfterDelay;
+
 
 
