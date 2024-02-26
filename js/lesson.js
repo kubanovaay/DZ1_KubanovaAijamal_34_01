@@ -107,3 +107,43 @@ converter(somInput, usdInput, eurInput, "som" )
 converter(usdInput, somInput, eurInput, "usd" )
 converter(eurInput, somInput, usdInput , "eur")
 
+// CARD SWITCHER
+
+const btnPrev = document.querySelector('#btn-prev');
+const btnNext = document.querySelector('#btn-next');
+const cardBlock = document.querySelector('.card');
+
+let count = 1;
+const totalTodos = 200;
+
+function updateCard(todoNumber) {
+    fetch(`https://jsonplaceholder.typicode.com/todos/${todoNumber}`)
+        .then(response => response.json())
+        .then(data => {
+            cardBlock.style.borderColor = `${data.completed ? 'green' : 'red'}`;
+            cardBlock.innerHTML = `
+            <p>${data.title}</p>
+            <p style="color: ${data.completed ? 'green' : 'red'}">${data.completed}</p>
+            <span>id: ${data.id}</span>
+            `;
+        });
+}
+
+function switchTodoAndUpdate(direction) {
+    count = direction === 'next' ? (count % totalTodos) + 1 : (count <= 1) ? totalTodos : count - 1;
+    updateCard(count);
+}
+updateCard(count);
+
+btnPrev.addEventListener('click', () => switchTodoAndUpdate('prev'));
+btnNext.addEventListener('click', () => switchTodoAndUpdate('next'));
+
+
+// Функция для запроса и вывода данных в консоль
+fetch('https://jsonplaceholder.typicode.com/posts', {})
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+    })
+
+

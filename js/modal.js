@@ -47,6 +47,38 @@ const openModalAfterDelay = () => {
 
 window.onload = openModalAfterDelay;
 
+// Post data
+
+const formElement = document.querySelector('form')
+
+const postData = (url, dataJson) => {
+    const response = fetch(url, {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: dataJson
+    })
+    return response
+}
+
+const bindPostData = (form) => {
+    form.onsubmit = (event) => {
+        event.preventDefault()
+
+        const formData = new FormData(form)
+        const user = {}
+        formData.forEach((item, index) => {
+            user[index] = item
+        })
+        const json = JSON.stringify(user)
+
+        postData('server.php', json)
+    }
+}
+
+bindPostData(formElement)
+
+// postData('server.php', json)
+
 
 
 
