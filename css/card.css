@@ -1,0 +1,45 @@
+body {
+    background-color: #000; /* черный цвет фона */
+}
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.card {
+    width: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    margin-top: 80px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    height: 150px; /* Новая высота изображения */
+    object-fit: cover;
+    border-radius: 10px 10px 0 0; /* Округленные углы только сверху */
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 14px;
+    margin-bottom: 0;
+    color: black; /* Черный цвет текста */
+}
+
+.card p {
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
