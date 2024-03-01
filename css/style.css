@@ -55,7 +55,7 @@
 
 .main_block {
     padding: 100px 0;
-    background: black;
+    background: #b41414;
 }
 
 /* BUTTONS COLOR PICKER */
@@ -247,7 +247,7 @@
     border: 8px solid transparent;
     animation: animate 5s linear infinite;
     transform-origin: bottom center;
-    animation-play-state: run;
+    animation-play-state: running;
 }
 
 @keyframes animate {

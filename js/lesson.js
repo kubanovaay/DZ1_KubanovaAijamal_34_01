@@ -67,20 +67,28 @@ showTabContents(currentIndex);
 
 // DRY - don`t repeat yourself
 
-const somInput = document.querySelector('#som')
-const usdInput = document.querySelector('#usd')
-const eurInput = document.querySelector('#eur')
+const somInput = document.querySelector('#som');
+const usdInput = document.querySelector('#usd');
+const eurInput = document.querySelector('#eur');
+const CONVERTER_DATA_URL = "../data/converter.json";
 
+const fetchConverterData = async () => {
+    try {
+        const response = await fetch(CONVERTER_DATA_URL);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
 
-const converter = (element, targetElement1,targetElement2, current) => {
-    element.oninput = () => {
-        const request = new XMLHttpRequest()
-        request.open("GET", "../data/converter.json")
-        request.setRequestHeader("Content-type", "application/json")
-        request.send()
-
-        request.onload = () => {
-            const data = JSON.parse(request.response)
+const converter = async (element, targetElement1, targetElement2, current) => {
+    element.addEventListener('input', async () => {
+        try {
+            const data = await fetchConverterData();
 
             switch (current) {
                 case 'som':
@@ -98,14 +106,20 @@ const converter = (element, targetElement1,targetElement2, current) => {
                 default:
                     break;
             }
-            element.value === "" && (targetElement1.value = "" , targetElement2.value = "")
+            if (element.value === "") {
+                targetElement1.value = "";
+                targetElement2.value = "";
+            }
+        } catch (error) {
+            console.error(error);
         }
-    }
-}
+    });
+};
 
-converter(somInput, usdInput, eurInput, "som" )
-converter(usdInput, somInput, eurInput, "usd" )
-converter(eurInput, somInput, usdInput , "eur")
+converter(somInput, usdInput, eurInput, "som");
+converter(usdInput, somInput, eurInput, "usd");
+converter(eurInput, somInput, usdInput , "eur");
+
 
 // CARD SWITCHER
 
@@ -115,18 +129,22 @@ const cardBlock = document.querySelector('.card');
 
 let count = 1;
 const totalTodos = 200;
+const TODOS_API_URL = 'https://jsonplaceholder.typicode.com/todos/';
+const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
-function updateCard(todoNumber) {
-    fetch(`https://jsonplaceholder.typicode.com/todos/${todoNumber}`)
-        .then(response => response.json())
-        .then(data => {
-            cardBlock.style.borderColor = `${data.completed ? 'green' : 'red'}`;
-            cardBlock.innerHTML = `
+async function updateCard(todoNumber) {
+    try {
+        const response = await fetch(`${TODOS_API_URL}${todoNumber}`);
+        const data = await response.json();
+        cardBlock.style.borderColor = `${data.completed ? 'green' : 'red'}`;
+        cardBlock.innerHTML = `
             <p>${data.title}</p>
             <p style="color: ${data.completed ? 'green' : 'red'}">${data.completed}</p>
             <span>id: ${data.id}</span>
-            `;
-        });
+        `;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 function switchTodoAndUpdate(direction) {
@@ -138,12 +156,41 @@ updateCard(count);
 btnPrev.addEventListener('click', () => switchTodoAndUpdate('prev'));
 btnNext.addEventListener('click', () => switchTodoAndUpdate('next'));
 
+// Асинхронная функция для запроса и вывода данных в консоль
+async function fetchData() {
+    try {
+        const response = await fetch(POSTS_API_URL, {});
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
 
-// Функция для запроса и вывода данных в консоль
-fetch('https://jsonplaceholder.typicode.com/posts', {})
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-    })
+fetchData();
 
 
+// WEATHER
+
+const cityInput = document.querySelector('.cityName');
+const citySpan = document.querySelector('.city');
+const tempSpan = document.querySelector('.temp');
+
+const BASE_URL = 'http://api.openweathermap.org';
+const API_KEY = 'e417df62e04d3b1b111abeab19cea714';
+
+const searchCity = async () => {
+    cityInput.addEventListener('input', async (event) => {
+        const cityName = event.target.value;
+        try {
+            const response = await fetch(`${BASE_URL}/data/2.5/weather?q=${cityName}&appid=${API_KEY}`);
+            const data = await response.json();
+            citySpan.innerHTML = data.name ? data.name : 'ГОРОД НЕ НАЙДЕН!';
+            tempSpan.innerHTML = data.main?.temp ? `${Math.round(data.main?.temp - 273)}&deg;C` : '....';
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+        }
+    });
+};
+
+searchCity();
